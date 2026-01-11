@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  app-dev:
+    container_name: apnaresume-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+
+  app:
+    container_name: apnaresume-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    env_file:
+      - .env.local
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
