@@ -10,6 +10,7 @@ import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
+import SectionOrderBoard from "./SectionOrderBoard";
 import ThemeColor from "@/components/layout/ThemeColor";
 import TemplateSelector from "@/components/layout/TemplateSelector";
 import { useToast } from "@/components/ui/use-toast";
@@ -60,7 +61,7 @@ const ResumeEditForm = ({
             size="sm"
             disabled={isLoading}
             onClick={async () => {
-              if (activeFormIndex != 5) {
+              if (activeFormIndex != 6) {
                 setActiveFormIndex(activeFormIndex + 1);
               } else {
                 setIsLoading(true);
@@ -76,6 +77,7 @@ const ResumeEditForm = ({
                   experience: formData?.experience,
                   education: formData?.education,
                   skills: formData?.skills,
+                  sectionOrder: formData?.sectionOrder,
                 };
 
                 const updateResult = await updateResume({
@@ -88,6 +90,7 @@ const ResumeEditForm = ({
                     phone: updates.phone,
                     email: updates.email,
                     summary: updates.summary,
+                    sectionOrder: updates.sectionOrder,
                   },
                 });
 
@@ -130,7 +133,7 @@ const ResumeEditForm = ({
               }
             }}
           >
-            {activeFormIndex == 5 ? (
+            {activeFormIndex == 6 ? (
               <>
                 {isLoading ? (
                   <>
@@ -161,6 +164,8 @@ const ResumeEditForm = ({
       ) : activeFormIndex == 5 ? (
         <SkillsForm params={params} />
       ) : activeFormIndex == 6 ? (
+        <SectionOrderBoard params={params} />
+      ) : activeFormIndex == 7 ? (
         redirect("/my-resume/" + params.id + "/view")
       ) : null}
     </div>

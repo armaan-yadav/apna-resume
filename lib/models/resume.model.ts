@@ -27,6 +27,7 @@ const resumeSchema = new mongoose.Schema({
   skills: [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
   themeColor: { type: String, default: themeColors[0] },
   template: { type: String, default: "classic" },
+  sectionOrder: { type: [String], default: ["summary", "experience", "education", "skills"] },
 });
 
 const Resume = mongoose.models.Resume || mongoose.model("Resume", resumeSchema);

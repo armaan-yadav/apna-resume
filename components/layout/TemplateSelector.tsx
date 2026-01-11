@@ -60,7 +60,7 @@ const TemplateSelector = ({ params }: { params: { id: string } }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="sm" className="btn-gradient flex gap-2">
+        <Button size="sm" className="btn-gradient flex gap-2" data-label="Template" aria-label="Template">
           <FileText size={16} /> Template
         </Button>
       </PopoverTrigger>

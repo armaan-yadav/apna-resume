@@ -164,11 +164,11 @@ const page = () => {
           {/* Template Preview */}
           <div className="flex justify-center">
             <div
-              className="relative overflow-hidden rounded-xl shadow-2xl bg-white border border-gray-200"
-              style={{ width: "336px", height: "475px" }}
+              className="relative overflow-hidden rounded-xl shadow-2xl bg-white border border-gray-200 hover:shadow-primary-200 transition-shadow"
+              style={{ width: "500px", height: "705px" }}
             >
               <div className="absolute inset-0 overflow-hidden">
-                <TemplatePreview template={activeTemplate} scale={0.4} />
+                <TemplatePreview template={activeTemplate} scale={0.6} />
               </div>
             </div>
           </div>
@@ -195,10 +195,10 @@ const page = () => {
                         ? "border-primary-700 shadow-primary-200"
                         : "border-transparent hover:border-gray-300"
                     }`}
-                    style={{ height: "300px" }}
+                    style={{ height: "360px" }}
                   >
                     <div className="absolute inset-0 overflow-hidden">
-                      <TemplatePreview template={template.id} scale={0.25} />
+                      <TemplatePreview template={template.id} scale={0.35} />
                     </div>
                     {activeTemplate === template.id && (
                       <div className="absolute top-2 right-2 bg-primary-700 text-white text-xs px-2 py-1 rounded">

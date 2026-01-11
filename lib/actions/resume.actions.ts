@@ -104,6 +104,7 @@ export async function updateResume({
     summary: string;
     themeColor: string;
     template: string;
+    sectionOrder: string[];
     socialLinks: {
       linkedin?: string;
       twitter?: string;

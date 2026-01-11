@@ -58,7 +58,7 @@ const ThemeColor = ({ params }: { params: { id: string } }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="sm" className="btn-gradient flex gap-2">
+        <Button size="sm" className="btn-gradient flex gap-2" data-label="Theme">
           {" "}
           <LayoutGrid /> Theme
         </Button>

@@ -196,7 +196,7 @@
 }
 
 .btn-gradient::after {
-  content: "Theme";
+  content: attr(data-label);
   position: absolute;
   background-color: #edeef3;
   width: 96%;

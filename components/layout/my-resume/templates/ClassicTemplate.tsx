@@ -45,6 +45,141 @@ const ClassicTemplate = () => {
 
   const themeColor = formData?.themeColor || themeColors[0];
 
+  const order: string[] = formData?.sectionOrder || ["summary", "experience", "education", "skills"];
+
+  const renderSection = (key: string) => {
+    switch (key) {
+      case "summary":
+        return (
+          formData?.summary && (
+            <p className="text-xs text-justify">{formData?.summary}</p>
+          )
+        );
+      case "experience":
+        return (
+          formData?.experience?.length > 0 && (
+            <div className="my-6">
+              <h2
+                className="text-center font-bold text-sm mb-2"
+                style={{ color: themeColor }}
+              >
+                Professional Experience
+              </h2>
+              <hr style={{ borderColor: themeColor }} />
+              {formData?.experience?.map((experience: any, index: number) => (
+                <div key={index} className="my-5">
+                  <h2 className="text-sm font-bold" style={{ color: themeColor }}>
+                    {experience?.title}
+                  </h2>
+                  <h2 className="text-xs flex justify-between">
+                    {experience?.companyName}
+                    {experience?.companyName && experience?.city && ", "}
+                    {experience?.city}
+                    {experience?.city && experience?.state && ", "}
+                    {experience?.state}
+                    <span>
+                      {experience?.startDate}
+                      {experience?.startDate &&
+                        (experience?.endDate || experience?.endDate === "") &&
+                        " to "}
+                      {experience?.startDate && experience?.endDate === ""
+                        ? "Present"
+                        : experience.endDate}
+                    </span>
+                  </h2>
+                  {experience?.workSummary && (
+                    <div
+                      className="text-xs my-2 form-preview"
+                      dangerouslySetInnerHTML={{ __html: experience?.workSummary }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )
+        );
+      case "education":
+        return (
+          formData?.education?.length > 0 && (
+            <div className="my-6">
+              <h2
+                className="text-center font-bold text-sm mb-2"
+                style={{ color: themeColor }}
+              >
+                Education
+              </h2>
+              <hr style={{ borderColor: themeColor }} />
+              {formData?.education.map((education: any, index: number) => (
+                <div key={index} className="my-5">
+                  <h2 className="text-sm font-bold" style={{ color: themeColor }}>
+                    {education.universityName}
+                  </h2>
+                  <h2 className="text-xs flex justify-between">
+                    {education?.degree}
+                    {education?.degree && education?.major && " in "}
+                    {education?.major}
+                    <span>
+                      {education?.startDate}
+                      {education?.startDate &&
+                        (education?.endDate || education?.endDate === "") &&
+                        " to "}
+                      {education?.startDate && education?.endDate === ""
+                        ? "Present"
+                        : education.endDate}
+                    </span>
+                  </h2>
+                  {education?.description && (
+                    <p className="text-xs my-2 text-justify">
+                      {education?.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )
+        );
+      case "skills":
+        return (
+          formData?.skills?.length > 0 && (
+            <div className="my-6">
+              <h2
+                className="text-center font-bold text-sm mb-2"
+                style={{ color: themeColor }}
+              >
+                Skills
+              </h2>
+              <hr style={{ borderColor: themeColor }} />
+              <div className="my-4 space-y-3">
+                {formData?.skills.map((skillCategory: any, index: number) => {
+                  if (skillCategory.category && skillCategory.skills) {
+                    return (
+                      <div key={index} className="text-xs">
+                        <span className="font-semibold" style={{ color: themeColor }}>
+                          {skillCategory.category}:
+                        </span>{" "}
+                        <span className="text-gray-700">
+                          {skillCategory.skills?.join(", ")}
+                        </span>
+                      </div>
+                    );
+                  } else if (skillCategory.name) {
+                    return (
+                      <span key={index} className="text-xs text-gray-700">
+                        {skillCategory.name}{index < formData.skills.length - 1 ? ", " : ""}
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            </div>
+          )
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div
       className="shadow-lg p-14 border-t-[20px] bg-white w-[210mm] min-h-[297mm] print:shadow-none"
@@ -100,129 +235,9 @@ const ClassicTemplate = () => {
         />
       </div>
 
-      {/* Summary */}
-      {formData?.summary && (
-        <p className="text-xs text-justify">{formData?.summary}</p>
-      )}
-
-      {/* Experience */}
-      {formData?.experience?.length > 0 && (
-        <div className="my-6">
-          <h2
-            className="text-center font-bold text-sm mb-2"
-            style={{ color: themeColor }}
-          >
-            Professional Experience
-          </h2>
-          <hr style={{ borderColor: themeColor }} />
-          {formData?.experience?.map((experience: any, index: number) => (
-            <div key={index} className="my-5">
-              <h2 className="text-sm font-bold" style={{ color: themeColor }}>
-                {experience?.title}
-              </h2>
-              <h2 className="text-xs flex justify-between">
-                {experience?.companyName}
-                {experience?.companyName && experience?.city && ", "}
-                {experience?.city}
-                {experience?.city && experience?.state && ", "}
-                {experience?.state}
-                <span>
-                  {experience?.startDate}
-                  {experience?.startDate &&
-                    (experience?.endDate || experience?.endDate === "") &&
-                    " to "}
-                  {experience?.startDate && experience?.endDate === ""
-                    ? "Present"
-                    : experience.endDate}
-                </span>
-              </h2>
-              {experience?.workSummary && (
-                <div
-                  className="text-xs my-2 form-preview"
-                  dangerouslySetInnerHTML={{ __html: experience?.workSummary }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Education */}
-      {formData?.education?.length > 0 && (
-        <div className="my-6">
-          <h2
-            className="text-center font-bold text-sm mb-2"
-            style={{ color: themeColor }}
-          >
-            Education
-          </h2>
-          <hr style={{ borderColor: themeColor }} />
-          {formData?.education.map((education: any, index: number) => (
-            <div key={index} className="my-5">
-              <h2 className="text-sm font-bold" style={{ color: themeColor }}>
-                {education.universityName}
-              </h2>
-              <h2 className="text-xs flex justify-between">
-                {education?.degree}
-                {education?.degree && education?.major && " in "}
-                {education?.major}
-                <span>
-                  {education?.startDate}
-                  {education?.startDate &&
-                    (education?.endDate || education?.endDate === "") &&
-                    " to "}
-                  {education?.startDate && education?.endDate === ""
-                    ? "Present"
-                    : education.endDate}
-                </span>
-              </h2>
-              {education?.description && (
-                <p className="text-xs my-2 text-justify">
-                  {education?.description}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Skills */}
-      {formData?.skills?.length > 0 && (
-        <div className="my-6">
-          <h2
-            className="text-center font-bold text-sm mb-2"
-            style={{ color: themeColor }}
-          >
-            Skills
-          </h2>
-          <hr style={{ borderColor: themeColor }} />
-          <div className="my-4 space-y-3">
-            {formData?.skills.map((skillCategory: any, index: number) => {
-              // Handle both old format (name/rating) and new format (category/skills)
-              if (skillCategory.category && skillCategory.skills) {
-                return (
-                  <div key={index} className="text-xs">
-                    <span className="font-semibold" style={{ color: themeColor }}>
-                      {skillCategory.category}:
-                    </span>{" "}
-                    <span className="text-gray-700">
-                      {skillCategory.skills?.join(", ")}
-                    </span>
-                  </div>
-                );
-              } else if (skillCategory.name) {
-                // Old format - just show the skill name
-                return (
-                  <span key={index} className="text-xs text-gray-700">
-                    {skillCategory.name}{index < formData.skills.length - 1 ? ", " : ""}
-                  </span>
-                );
-              }
-              return null;
-            })}
-          </div>
-        </div>
-      )}
+      {order.map((key) => (
+        <div key={key}>{renderSection(key)}</div>
+      ))}
     </div>
   );
 };
