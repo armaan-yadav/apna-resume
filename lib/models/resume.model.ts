@@ -25,9 +25,12 @@ const resumeSchema = new mongoose.Schema({
   experience: [{ type: mongoose.Schema.Types.ObjectId, ref: "Experience" }],
   education: [{ type: mongoose.Schema.Types.ObjectId, ref: "Education" }],
   skills: [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }],
+  achievements: [{ type: mongoose.Schema.Types.ObjectId, ref: "Achievement" }],
+  certifications: [{ type: mongoose.Schema.Types.ObjectId, ref: "Certification" }],
+  customSections: [{ type: mongoose.Schema.Types.ObjectId, ref: "CustomSection" }],
   themeColor: { type: String, default: themeColors[0] },
   template: { type: String, default: "classic" },
-  sectionOrder: { type: [String], default: ["summary", "experience", "education", "skills"] },
+  sectionOrder: { type: [String], default: ["summary", "experience", "education", "skills", "achievements", "certifications", "customSections"] },
 });
 
 const Resume = mongoose.models.Resume || mongoose.model("Resume", resumeSchema);

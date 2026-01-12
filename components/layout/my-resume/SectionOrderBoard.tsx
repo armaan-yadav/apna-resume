@@ -3,7 +3,7 @@
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { useFormContext } from "@/lib/context/FormProvider";
 import { Button } from "@/components/ui/button";
-import { GripVertical, List, Briefcase, GraduationCap, Layers } from "lucide-react";
+import { GripVertical, List, Briefcase, GraduationCap, Layers, Award, Certificate, FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { updateResume } from "@/lib/actions/resume.actions";
 import { useToast } from "@/components/ui/use-toast";
@@ -13,9 +13,12 @@ const SECTION_LABELS: Record<string, { label: string; icon: any }> = {
   experience: { label: "Experience", icon: Briefcase },
   education: { label: "Education", icon: GraduationCap },
   skills: { label: "Skills", icon: Layers },
+  achievements: { label: "Achievements", icon: Award },
+  certifications: { label: "Certifications", icon: Certificate },
+  customSections: { label: "Custom Sections", icon: FileText },
 };
 
-const DEFAULT_ORDER = ["summary", "experience", "education", "skills"];
+const DEFAULT_ORDER = ["summary", "experience", "education", "skills", "achievements", "certifications", "customSections"];
 
 export default function SectionOrderBoard({ params }: { params: { id: string } }) {
   const { formData, handleInputChange } = useFormContext();

@@ -5,6 +5,9 @@ import Education from "../models/education.model";
 import Experience from "../models/experience.model";
 import Resume from "../models/resume.model";
 import Skill from "../models/skill.model";
+import Achievement from "../models/achievement.model";
+import Certification from "../models/certification.model";
+import CustomSection from "../models/customSection.model";
 import { connectToDB } from "../mongoose";
 import { revalidatePath } from "next/cache";
 
@@ -49,6 +52,18 @@ export async function fetchResume(resumeId: string) {
       .populate({
         path: "skills",
         model: Skill,
+      })
+      .populate({
+        path: "achievements",
+        model: Achievement,
+      })
+      .populate({
+        path: "certifications",
+        model: Certification,
+      })
+      .populate({
+        path: "customSections",
+        model: CustomSection,
       });
 
     return JSON.stringify(resume);
@@ -302,5 +317,125 @@ export async function deleteResume(resumeId: string, path: string) {
   } catch (error: any) {
     console.error(`Failed to delete resume: ${error.message}`);
     return { success: false, error: error.message };
+  }
+}
+
+export async function addAchievementToResume(
+  resumeId: string,
+  achievementDataArray: any
+) {
+  try {
+    const resume = await Resume.findOne({ resumeId: resumeId });
+
+    if (!resume) {
+      throw new Error("Resume not found");
+    }
+
+    const savedAchievements = await Promise.all(
+      achievementDataArray.map(async (achievementData: any) => {
+        if (achievementData._id) {
+          const existingAchievement = await Achievement.findById(achievementData._id);
+          if (existingAchievement) {
+            return await Achievement.findByIdAndUpdate(
+              achievementData._id,
+              achievementData,
+              { new: true }
+            );
+          }
+        }
+        const newAchievement = new Achievement(achievementData);
+        return await newAchievement.save();
+      })
+    );
+
+    const achievementIds = savedAchievements.map((achievement) => achievement._id);
+    resume.achievements = achievementIds;
+
+    const updatedResume = await resume.save();
+
+    return { success: true, data: JSON.stringify(updatedResume) };
+  } catch (error: any) {
+    console.error("Error adding or updating achievement to resume: ", error);
+    return { success: false, error: error?.message };
+  }
+}
+
+export async function addCertificationToResume(
+  resumeId: string,
+  certificationDataArray: any
+) {
+  try {
+    const resume = await Resume.findOne({ resumeId: resumeId });
+
+    if (!resume) {
+      throw new Error("Resume not found");
+    }
+
+    const savedCertifications = await Promise.all(
+      certificationDataArray.map(async (certificationData: any) => {
+        if (certificationData._id) {
+          const existingCertification = await Certification.findById(certificationData._id);
+          if (existingCertification) {
+            return await Certification.findByIdAndUpdate(
+              certificationData._id,
+              certificationData,
+              { new: true }
+            );
+          }
+        }
+        const newCertification = new Certification(certificationData);
+        return await newCertification.save();
+      })
+    );
+
+    const certificationIds = savedCertifications.map((certification) => certification._id);
+    resume.certifications = certificationIds;
+
+    const updatedResume = await resume.save();
+
+    return { success: true, data: JSON.stringify(updatedResume) };
+  } catch (error: any) {
+    console.error("Error adding or updating certification to resume: ", error);
+    return { success: false, error: error?.message };
+  }
+}
+
+export async function addCustomSectionToResume(
+  resumeId: string,
+  customSectionDataArray: any
+) {
+  try {
+    const resume = await Resume.findOne({ resumeId: resumeId });
+
+    if (!resume) {
+      throw new Error("Resume not found");
+    }
+
+    const savedCustomSections = await Promise.all(
+      customSectionDataArray.map(async (customSectionData: any) => {
+        if (customSectionData._id) {
+          const existingCustomSection = await CustomSection.findById(customSectionData._id);
+          if (existingCustomSection) {
+            return await CustomSection.findByIdAndUpdate(
+              customSectionData._id,
+              customSectionData,
+              { new: true }
+            );
+          }
+        }
+        const newCustomSection = new CustomSection(customSectionData);
+        return await newCustomSection.save();
+      })
+    );
+
+    const customSectionIds = savedCustomSections.map((section) => section._id);
+    resume.customSections = customSectionIds;
+
+    const updatedResume = await resume.save();
+
+    return { success: true, data: JSON.stringify(updatedResume) };
+  } catch (error: any) {
+    console.error("Error adding or updating custom section to resume: ", error);
+    return { success: false, error: error?.message };
   }
 }

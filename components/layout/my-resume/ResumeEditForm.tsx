@@ -10,6 +10,9 @@ import SummaryForm from "./forms/SummaryForm";
 import ExperienceForm from "./forms/ExperienceForm";
 import EducationForm from "./forms/EducationForm";
 import SkillsForm from "./forms/SkillsForm";
+import AchievementForm from "./forms/AchievementForm";
+import CertificationForm from "./forms/CertificationForm";
+import CustomSectionForm from "./forms/CustomSectionForm";
 import SectionOrderBoard from "./SectionOrderBoard";
 import ThemeColor from "@/components/layout/ThemeColor";
 import TemplateSelector from "@/components/layout/TemplateSelector";
@@ -19,6 +22,9 @@ import {
   addEducationToResume,
   addExperienceToResume,
   addSkillToResume,
+  addAchievementToResume,
+  addCertificationToResume,
+  addCustomSectionToResume,
   updateResume,
 } from "@/lib/actions/resume.actions";
 
@@ -61,7 +67,7 @@ const ResumeEditForm = ({
             size="sm"
             disabled={isLoading}
             onClick={async () => {
-              if (activeFormIndex != 6) {
+              if (activeFormIndex != 9) {
                 setActiveFormIndex(activeFormIndex + 1);
               } else {
                 setIsLoading(true);
@@ -77,6 +83,9 @@ const ResumeEditForm = ({
                   experience: formData?.experience,
                   education: formData?.education,
                   skills: formData?.skills,
+                  achievements: formData?.achievements,
+                  certifications: formData?.certifications,
+                  customSections: formData?.customSections,
                   sectionOrder: formData?.sectionOrder,
                 };
 
@@ -109,13 +118,31 @@ const ResumeEditForm = ({
                   updates.skills
                 );
 
+                const achievementsResult = await addAchievementToResume(
+                  params.id,
+                  updates.achievements
+                );
+
+                const certificationsResult = await addCertificationToResume(
+                  params.id,
+                  updates.certifications
+                );
+
+                const customSectionsResult = await addCustomSectionToResume(
+                  params.id,
+                  updates.customSections
+                );
+
                 setIsLoading(false);
 
                 if (
                   updateResult.success &&
                   experienceResult.success &&
                   educationResult.success &&
-                  skillsResult.success
+                  skillsResult.success &&
+                  achievementsResult.success &&
+                  certificationsResult.success &&
+                  customSectionsResult.success
                 ) {
                   router.push("/my-resume/" + params.id + "/view");
                 } else {
@@ -125,7 +152,10 @@ const ResumeEditForm = ({
                       updateResult?.error ||
                       experienceResult?.error ||
                       educationResult?.error ||
-                      skillsResult?.error,
+                      skillsResult?.error ||
+                      achievementsResult?.error ||
+                      certificationsResult?.error ||
+                      customSectionsResult?.error,
                     variant: "destructive",
                     className: "bg-white",
                   });
@@ -133,7 +163,7 @@ const ResumeEditForm = ({
               }
             }}
           >
-            {activeFormIndex == 6 ? (
+            {activeFormIndex == 9 ? (
               <>
                 {isLoading ? (
                   <>
@@ -164,8 +194,14 @@ const ResumeEditForm = ({
       ) : activeFormIndex == 5 ? (
         <SkillsForm params={params} />
       ) : activeFormIndex == 6 ? (
-        <SectionOrderBoard params={params} />
+        <AchievementForm params={params} />
       ) : activeFormIndex == 7 ? (
+        <CertificationForm params={params} />
+      ) : activeFormIndex == 8 ? (
+        <CustomSectionForm params={params} />
+      ) : activeFormIndex == 9 ? (
+        <SectionOrderBoard params={params} />
+      ) : activeFormIndex == 10 ? (
         redirect("/my-resume/" + params.id + "/view")
       ) : null}
     </div>

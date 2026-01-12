@@ -54,7 +54,8 @@ const ModernTemplate = () => {
   };
 
   const themeColor = formData?.themeColor || themeColors[0];
-  const order: string[] = (formData?.sectionOrder || ["summary", "experience", "education", "skills"]).filter((k: string) => k !== "skills");
+  const defaultOrder = ["summary", "experience", "education", "skills", "achievements", "certifications", "customSections"];
+  const order: string[] = Array.from(new Set([...(formData?.sectionOrder || []), ...defaultOrder])).filter((k: string) => k !== "skills");
 
   const renderRightSection = (key: string) => {
     switch (key) {
@@ -158,6 +159,87 @@ const ModernTemplate = () => {
               ))}
             </div>
           )
+        );
+      case "achievements":
+        return (
+          formData?.achievements?.length > 0 && (
+            <div className="mb-6">
+              <h3
+                className="text-sm font-bold uppercase tracking-wider mb-3 pb-1 border-b-2"
+                style={{ color: themeColor, borderColor: themeColor }}
+              >
+                Achievements
+              </h3>
+              <div className="space-y-3">
+                {formData?.achievements.map((achievement: any, index: number) => (
+                  <div key={index}>
+                    <h4 className="text-sm font-bold" style={{ color: themeColor }}>
+                      {achievement?.title}
+                    </h4>
+                    <p className="text-xs text-gray-600">{achievement?.date}</p>
+                    <p className="text-xs text-gray-700">{achievement?.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        );
+      case "certifications":
+        return (
+          formData?.certifications?.length > 0 && (
+            <div className="mb-6">
+              <h3
+                className="text-sm font-bold uppercase tracking-wider mb-3 pb-1 border-b-2"
+                style={{ color: themeColor, borderColor: themeColor }}
+              >
+                Certifications
+              </h3>
+              <div className="space-y-3">
+                {formData?.certifications.map((cert: any, index: number) => (
+                  <div key={index}>
+                    <h4 className="text-sm font-bold" style={{ color: themeColor }}>
+                      {cert?.title}
+                    </h4>
+                    <p className="text-xs text-gray-600">{cert?.issuer}</p>
+                    <p className="text-xs text-gray-700">
+                      {cert?.issueDate}
+                      {cert?.expiryDate && ` - ${cert.expiryDate}`}
+                    </p>
+                    {cert?.credentialUrl && (
+                      <a
+                        href={cert.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs hover:underline"
+                        style={{ color: themeColor }}
+                      >
+                        View Credential
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        );
+      case "customSections":
+        return (
+          <>
+            {formData?.customSections?.map((section: any, index: number) => (
+              <div key={index} className="mb-6">
+                <h3
+                  className="text-sm font-bold uppercase tracking-wider mb-3 pb-1 border-b-2"
+                  style={{ color: themeColor, borderColor: themeColor }}
+                >
+                  {section?.title}
+                </h3>
+                <div
+                  className="text-xs text-gray-700 form-preview"
+                  dangerouslySetInnerHTML={{ __html: section?.content }}
+                />
+              </div>
+            ))}
+          </>
         );
       default:
         return null;
